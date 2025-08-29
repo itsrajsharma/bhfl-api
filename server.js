@@ -3,6 +3,10 @@ const app = express();
 
 app.use(express.json());
 
+app.get('/', (req, res) => {
+  res.json({ ok: true, message: "Backend up. Use POST /bfhl" });
+});
+
 app.post('/bfhl', (req, res) => {
   const { data } = req.body;
   
@@ -56,7 +60,13 @@ app.post('/bfhl', (req, res) => {
   });
 });
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-}); 
+// For local development
+if (process.env.NODE_ENV !== 'production') {
+  const PORT = process.env.PORT || 3000;
+  app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+  });
+}
+
+// For Vercel deployment
+module.exports = app; 
